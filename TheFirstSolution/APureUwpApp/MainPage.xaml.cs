@@ -17,14 +17,23 @@ using Windows.UI.Xaml.Navigation;
 
 namespace APureUwpApp
 {
+
+    
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        static int Pageclickcounter = 0;
+
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            var tu = new MyTileUpdater();
+            tu.UpdateTile(new List<string> { $"Zeile 1: {Pageclickcounter++}", $"Zeile 2: {DateTime.Now}" });
         }
     }
 }
