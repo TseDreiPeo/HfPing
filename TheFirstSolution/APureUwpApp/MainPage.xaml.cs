@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using APureUwpApp.Logger;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -17,7 +19,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace APureUwpApp
 {
-
     
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -29,11 +30,23 @@ namespace APureUwpApp
         public MainPage()
         {
             this.InitializeComponent();
+            MyConsoleTxtBlock.Text += $"Main Page initilized.{Environment.NewLine}";
+            MyConsoleTxtBlock.Text += $"Applications Data folder: {ApplicationData.Current.LocalFolder.Path}{Environment.NewLine}";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             var tu = new MyTileUpdater();
-            tu.UpdateTile(new List<string> { $"Zeile 1: {Pageclickcounter++}", $"Zeile 2: {DateTime.Now}" });
+            ulong size = ((MyLogger)((App)App.Current).Logger).GetCurrentLogFileSize();
+            tu.UpdateTile(new List<string> { $"LastUpdate: {DateTime.Now}", $"Clicks: {Pageclickcounter++}", $"LogFileSize: {size}" });
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            MyConsoleTxtBlock.Text += $"Click #{Pageclickcounter} {Environment.NewLine}";
+            ((App)App.Current).Logger.Log($"Button click nr: {Pageclickcounter++}" );
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            MyConsoleTxtBlock.Text = $"{Environment.NewLine}";
         }
     }
 }
