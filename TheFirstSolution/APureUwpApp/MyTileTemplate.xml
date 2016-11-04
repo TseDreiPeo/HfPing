@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <tile>
   <visual>
-
     <binding template="TileSmall" hint-align="center">
       <text>0 Ok</text>
       <text>0 Fail</text>
@@ -21,6 +20,5 @@
       <text>Large</text>
       <text>Large</text>
     </binding>
-
   </visual>
 </tile>
