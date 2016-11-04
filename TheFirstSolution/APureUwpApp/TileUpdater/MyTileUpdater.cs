@@ -44,13 +44,23 @@ namespace APureUwpApp {
         private XmlDocument GetTileXML() {
             XmlDocument tile = new XmlDocument();
 
-            var assembly = typeof(MyTileUpdater).GetTypeInfo().Assembly;
-            Stream stream = assembly.GetManifestResourceStream("APureUwpApp.MyTileTemplate.xml");
-            string text = "";
-            using(var reader = new System.IO.StreamReader(stream)) {
-                text = reader.ReadToEnd();
+            try {
+                var assembly = typeof(MyTileUpdater).GetTypeInfo().Assembly;
+                Stream stream = assembly.GetManifestResourceStream("APureUwpApp.MyTileTemplate.xml");
+                string text = "";
+                using(var reader = new System.IO.StreamReader(stream)) {
+                    text = reader.ReadToEnd();
+                }
+                tile.LoadXml(text);
+            } catch (Exception ex) {
+#if DEBUG
+                if(System.Diagnostics.Debugger.IsAttached) {
+                    var message = ex.Message;
+                    System.Diagnostics.Debugger.Break();
+                }
+#endif
+                throw ex;
             }
-            tile.LoadXml(text);
             return tile;
         }
 
