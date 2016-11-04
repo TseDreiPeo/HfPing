@@ -26,19 +26,20 @@ namespace APureUwpApp {
             //tileXml.GetElementsByTagName("text")[1].InnerText = $"T: {ticks.ToString()}";
 
             var wideTile = tileXml.SelectSingleNode("/tile/visual/binding[@template=\"TileWide\"]");
-            var nodes = tileXml.SelectNodes("/tile/visual/binding[@template=\"TileWide\"]/text").Reverse();
-            foreach(var n in nodes) {
-                wideTile.RemoveChild(n);
-            }
-            foreach(var t in lines) {
-                XmlElement txt = tileXml.CreateElement("text");
-                txt.InnerText = t;
-                wideTile.AppendChild(txt);
-            }
+            if(wideTile != null) {
+                var nodes = tileXml.SelectNodes("/tile/visual/binding[@template=\"TileWide\"]/text").Reverse();
+                foreach(var n in nodes) {
+                    wideTile.RemoveChild(n);
+                }
+                foreach(var t in lines) {
+                    XmlElement txt = tileXml.CreateElement("text");
+                    txt.InnerText = t;
+                    wideTile.AppendChild(txt);
+                }
 
-
-            // Create a new tile notification.
-            updater.Update(new Windows.UI.Notifications.TileNotification(tileXml));
+                // Create a new tile notification.
+                updater.Update(new Windows.UI.Notifications.TileNotification(tileXml));
+            }
         }
 
         private XmlDocument GetTileXML() {
@@ -46,10 +47,12 @@ namespace APureUwpApp {
 
             try {
                 var assembly = typeof(MyTileUpdater).GetTypeInfo().Assembly;
-                Stream stream = assembly.GetManifestResourceStream("APureUwpApp.MyTileTemplate.xml");
+                Stream stream = assembly.GetManifestResourceStream("APureUwpApp.TileUpdater.MyTileTemplate.xml");
                 string text = "";
-                using(var reader = new System.IO.StreamReader(stream)) {
-                    text = reader.ReadToEnd();
+                if(stream != null) {
+                    using(var reader = new System.IO.StreamReader(stream)) {
+                        text = reader.ReadToEnd();
+                    }
                 }
                 tile.LoadXml(text);
             } catch (Exception ex) {
@@ -58,8 +61,9 @@ namespace APureUwpApp {
                     var message = ex.Message;
                     System.Diagnostics.Debugger.Break();
                 }
-#endif
+#else 
                 throw ex;
+#endif
             }
             return tile;
         }
