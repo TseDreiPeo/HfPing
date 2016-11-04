@@ -37,7 +37,7 @@ namespace APureUwpApp
         private void Button_Click(object sender, RoutedEventArgs e) {
             var tu = new MyTileUpdater();
             ulong size = ((MyLogger)((App)App.Current).Logger).GetCurrentLogFileSize();
-            tu.UpdateTile(new List<string> { $"LastUpdate: {DateTime.Now}", $"Clicks: {Pageclickcounter++}", $"LogFileSize: {size}" });
+            tu.UpdateTile(new List<string> { $"{Pageclickcounter++} Clicks", $"{size} bytes MyLogFile.txt",  $"{DateTime.Now.ToString("HH:mm:ss dd.MM.yy")} - LastUpdate"});
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {

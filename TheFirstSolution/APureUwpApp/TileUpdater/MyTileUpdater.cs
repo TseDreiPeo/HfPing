@@ -19,26 +19,34 @@ namespace APureUwpApp {
                 updater = Windows.UI.Notifications.TileUpdateManager.CreateTileUpdaterForApplication();
                 updater.EnableNotificationQueue(false);
                 updater.Clear();
-                // get the XML content of one of the predefined tile templates, so that, you can customize it
-                //tileXmlWide = Windows.UI.Notifications.TileUpdateManager.GetTemplateContent(Windows.UI.Notifications.TileTemplateType.TileWide310x150Text04);
                 tileXml = GetTileXML();
             }
-            //tileXml.GetElementsByTagName("text")[1].InnerText = $"T: {ticks.ToString()}";
 
-            var wideTile = tileXml.SelectSingleNode("/tile/visual/binding[@template=\"TileWide\"]");
-            if(wideTile != null) {
-                var nodes = tileXml.SelectNodes("/tile/visual/binding[@template=\"TileWide\"]/text").Reverse();
+            UpdateSingleTile("TileWide", lines);
+            UpdateSingleTile("TileMedium", lines);
+            UpdateSingleTile("TileSmall", lines);
+
+            updater.Update(new Windows.UI.Notifications.TileNotification(tileXml));
+        }
+
+        private void UpdateSingleTile(string tileType, List<string> lines) {
+            int linesToUse = Math.Min(lines.Count, 6);
+            int lengthToUse = 100;
+            switch(tileType) {  case "TileSmall": { linesToUse = 2; lengthToUse = 6; break; };
+                                case "TileMedium": {lengthToUse = 14; break; };
+                                default: break; }            
+       
+            var aTile = tileXml.SelectSingleNode($"/tile/visual/binding[@template=\"{tileType}\"]");
+            if(aTile != null) {
+                var nodes = tileXml.SelectNodes($"/tile/visual/binding[@template=\"{tileType}\"]/text").Reverse();
                 foreach(var n in nodes) {
-                    wideTile.RemoveChild(n);
+                    aTile.RemoveChild(n);
                 }
-                foreach(var t in lines) {
+                for(int i = 0; i < linesToUse; i++) {
                     XmlElement txt = tileXml.CreateElement("text");
-                    txt.InnerText = t;
-                    wideTile.AppendChild(txt);
+                    txt.InnerText = lines[i].Length > lengthToUse?lines[i].Substring(0, lengthToUse):lines[i];
+                    aTile.AppendChild(txt);
                 }
-
-                // Create a new tile notification.
-                updater.Update(new Windows.UI.Notifications.TileNotification(tileXml));
             }
         }
 
