@@ -13,8 +13,13 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <ScrollViewer HorizontalScrollMode="Enabled">
+            <TextBlock Name="MyConsoleTxtBlock" IsTextSelectionEnabled="True" />
+        </ScrollViewer>
         <StackPanel Grid.Row ="2" Orientation="Horizontal">
+            <Button Content="Clr" Click="Button_Click_2" />
             <Button Content="UpdateTile manual" Click="Button_Click" />
+            <Button Content="Log A line" Click="Button_Click_1" />
         </StackPanel>
 
     </Grid>
